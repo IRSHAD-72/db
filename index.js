@@ -1,16 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
-import bodyParser from "body-parser";
 
 const app = express();
-const port = 5000;
+app.use(express.urlencoded({ extended: true }));
+
+const port = 3002;
 
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 
-const mongoURI = "mongodb+srv://irshad:irshadsheikh@cluster1.d60cj.mongodb.net/testdb?retryWrites=true&w=majority";
+
+const mongoURI = "mongodb+srv://irshad:irshadsheikh@cluster1.d60cj.mongodb.net/cluster1?retryWrites=true&w=majority";
 mongoose.connect(mongoURI);
 
 const db = mongoose.connection;
@@ -72,6 +72,18 @@ app.post("/submit-form", async (req, res) => {
     res.status(500).json({ message: "Error saving user data", error });
   }
 });
+
+
+app.get("/users", async (req, res) => {
+   try {
+     const users = await User.find();  
+     res.status(200).json(users);
+   } catch (error) {
+     console.error(error);
+     res.status(500).json({ message: "Error retrieving user data", error });
+   }
+ });
+ 
 
 
 app.listen(port, () => {
