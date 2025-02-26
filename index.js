@@ -88,6 +88,16 @@ app.get("/users/:id", async (req, res) => {
       res.status(500).json({ message: "Error retrieving user data", error });
     }
   });
+app.get("/users", async (req, res) => {
+    try {
+        const users = await User.find();
+      res.status(200).json(users);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error retrieving user data", error });
+    }
+  });
+
    app.put("/users/:id", async (req, res) => {
   const updateduser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
   res.json({ message: "User updated!", users: updateduser });
